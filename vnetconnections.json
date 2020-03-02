@@ -1,0 +1,46 @@
+"virtualNetworkConnections": [
+                    {
+                        "name": "hub-spoke1",                      
+                        "properties": {
+                            "remoteVirtualNetwork": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworks_spoke_1_name'))]"
+                            },
+                            "allowHubToRemoteVnetTransit": true,
+                            "allowRemoteVnetToUseHubVnetGateways": true,
+                            "enableInternetSecurity": true
+                        }
+                    },
+                    {
+                        "name": "hub-spoke2",
+                        "properties": {
+                            "remoteVirtualNetwork": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworks_spoke_2_name'))]"
+                            },
+                            "allowHubToRemoteVnetTransit": true,
+                            "allowRemoteVnetToUseHubVnetGateways": true,
+                            "enableInternetSecurity": true
+                        }
+                    },
+                    {
+                        "name": "hub-spoke3",
+                        "properties": {
+                            "remoteVirtualNetwork": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworks_spoke_3_name'))]"
+                            },
+                            "allowHubToRemoteVnetTransit": true,
+                            "allowRemoteVnetToUseHubVnetGateways": true,
+                            "enableInternetSecurity": true
+                        }
+                    },
+                    {
+                        "name": "spoke-4",
+                        "properties": {
+                            "remoteVirtualNetwork": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworks_spoke_4_name'))]"
+                            },
+                            "allowHubToRemoteVnetTransit": true,
+                            "allowRemoteVnetToUseHubVnetGateways": true,
+                            "enableInternetSecurity": true
+                        }
+                    }
+                ],

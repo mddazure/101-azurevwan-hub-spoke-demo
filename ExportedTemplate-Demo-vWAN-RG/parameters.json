@@ -1,0 +1,114 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vpnSites_Onprem_1_name": {
+            "value": null
+        },
+        "virtualWans_Demo_vWAN_name": {
+            "value": null
+        },
+        "virtualMachines_onprem_name": {
+            "value": null
+        },
+        "virtualMachines_vwan_1_name": {
+            "value": null
+        },
+        "virtualMachines_vwan_2_name": {
+            "value": null
+        },
+        "virtualMachines_vwan_3_name": {
+            "value": null
+        },
+        "virtualMachines_vwan_4_name": {
+            "value": null
+        },
+        "virtualHubs_Demo_WE_Hub_name": {
+            "value": null
+        },
+        "virtualNetworks_spoke_1_name": {
+            "value": null
+        },
+        "virtualNetworks_spoke_2_name": {
+            "value": null
+        },
+        "virtualNetworks_spoke_3_name": {
+            "value": null
+        },
+        "virtualNetworks_spoke_4_name": {
+            "value": null
+        },
+        "networkInterfaces_vwan_32_name": {
+            "value": null
+        },
+        "firewallPolicies_Demo_vWAN_name": {
+            "value": null
+        },
+        "networkInterfaces_onprem601_name": {
+            "value": null
+        },
+        "networkInterfaces_vwan_1832_name": {
+            "value": null
+        },
+        "networkInterfaces_vwan_2403_name": {
+            "value": null
+        },
+        "networkInterfaces_vwan_4459_name": {
+            "value": null
+        },
+        "publicIPAddresses_spoke_1_ip_name": {
+            "value": null
+        },
+        "publicIPAddresses_spoke_2_ip_name": {
+            "value": null
+        },
+        "publicIPAddresses_spoke_3_ip_name": {
+            "value": null
+        },
+        "publicIPAddresses_spoke_4_ip_name": {
+            "value": null
+        },
+        "localNetworkGateways_vwan_hub_name": {
+            "value": null
+        },
+        "storageAccounts_demovwanrgdiag_name": {
+            "value": null
+        },
+        "networkSecurityGroups_onprem_nsg_name": {
+            "value": null
+        },
+        "networkSecurityGroups_vwan_1_nsg_name": {
+            "value": null
+        },
+        "networkSecurityGroups_vwan_2_nsg_name": {
+            "value": null
+        },
+        "networkSecurityGroups_vwan_3_nsg_name": {
+            "value": null
+        },
+        "networkSecurityGroups_vwan_4_nsg_name": {
+            "value": null
+        },
+        "publicIPAddresses_onprem_vm_pubip_name": {
+            "value": null
+        },
+        "storageAccounts_demonsglogsuseast_name": {
+            "value": null
+        },
+        "storageAccounts_demovwanrgdiag277_name": {
+            "value": null
+        },
+        "storageAccounts_demovwanrgdiag286_name": {
+            "value": null
+        },
+        "vpnGateways_b2ff95c0bd0e4332ad91d5da9160aca8_westeurope_gw_name": {
+            "value": null
+        },
+        "virtualNetworks_onprem_externalid": {
+            "value": null
+        },
+        "virtualNetworks_HV_Demo_WE_Hub_96e1dbca_4093_4fae_8cd9_9dafb56a3ebf_externalid": {
+            "value": null
+        }
+    }
+}
