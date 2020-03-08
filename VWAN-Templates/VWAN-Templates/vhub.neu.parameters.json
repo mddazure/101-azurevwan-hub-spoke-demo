@@ -1,0 +1,93 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vwanname": {
+            "value": "global-vwan"
+        },
+        "vhub": {
+            "value": {
+                "name": "neu-vhub",
+                "location": "northeurope",
+                "addressPrefix": "10.51.212.0/24",
+                "virtualNetworkConnections": [
+                    {
+                        "name": "neu-vhub-msx1",
+                        "properties": {
+                            "remoteVirtualNetwork": {
+                                "id": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/neu-msx1-network/providers/Microsoft.Network/virtualNetworks/neu-msx1-vnet"
+                            },
+                            "allowHubToRemoteVnetTransit": true,
+                            "allowRemoteVnetToUseHubVnetGateways": true,
+                            "enableInternetSecurity": true
+                        }
+                    },
+                    {
+                        "name": "neu-vhub-msx2",
+                        "properties": {
+                            "remoteVirtualNetwork": {
+                                "id": "/subscriptions/558bf93d-0c7b-4436-82ab-a7ed6fda34aa/resourceGroups/neu-msx2-network/providers/Microsoft.Network/virtualNetworks/neu-msx2-vnet"
+                            },
+                            "allowHubToRemoteVnetTransit": true,
+                            "allowRemoteVnetToUseHubVnetGateways": true,
+                            "enableInternetSecurity": true
+                        }
+                    },
+                    {
+                        "name": "neu-vhub-www2",
+                        "properties": {
+                            "remoteVirtualNetwork": {
+                                "id": "/subscriptions/8353a044-7113-40f5-89ea-19a083b77c53/resourceGroups/neu-www2-network/providers/Microsoft.Network/virtualNetworks/neu-www2-vnet"
+                            },
+                            "allowHubToRemoteVnetTransit": true,
+                            "allowRemoteVnetToUseHubVnetGateways": true,
+                            "enableInternetSecurity": true
+                        }
+                    }                    
+                ],
+                "virtualHubRouteTableV2s": [
+                    {
+                        "name": "VirtualNetworkRouteTable",
+                        "properties": {
+                            "routes": [
+                                {
+                                    "destinationType": "CIDR",
+                                    "destinations": [
+                                        "0.0.0.0/0"
+                                    ],
+                                    "nextHopType": "IPAddress",
+                                    "nextHops": [
+                                        "10.51.212.68"
+                                    ]
+                                }
+                            ],
+                            "attachedConnections": [
+                                "All_Vnets"
+                            ]
+                        }
+                    }
+                ],                
+                "vpnGateway": {
+                    "id": "/subscriptions/99c2838f-a548-4884-a6e2-38c1f8fb4c0b/resourceGroups/global-vwan/providers/Microsoft.Network/vpnGateways/neu-vhub-vpngw"
+                }
+            }
+        },
+        "vpngw": {
+            "value": {
+                "name": "neu-vhub-vpngw",
+                "bgpSettings": {
+                    "asn": 65515
+                },
+                "vpnGatewayScaleUnit": 1
+            }
+        },
+        "azfw": {
+            "value": {
+                "name": "neu-vhub-azfw",
+                "firewallPolicy": {
+                    "id": "/subscriptions/99c2838f-a548-4884-a6e2-38c1f8fb4c0b/resourceGroups/global-vwan/providers/Microsoft.Network/firewallPolicies/global-fw-policy"
+                }
+            }
+        }        
+    }
+}

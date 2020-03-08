@@ -1,0 +1,160 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vwanname": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the Virtual WAN"
+            }
+        },
+        "vhub": {
+            "type": "object",
+            "metadata": {
+                "description": "Object describing Virtual WAN vHub"
+            }
+        },
+        "vpngw": {
+            "type": "object",
+            "defaultValue": {},
+            "metadata": {
+                "description": "Object describing VPN gateway"
+            }
+        },
+        "ergw": {
+            "type": "object",
+            "defaultValue": {},
+            "metadata": {
+                "description": "Object describing ExpressRoute gateway"
+            }
+        },
+        "azfw": {
+            "type": "object",
+            "defaultValue": {},
+            "metadata": {
+                "description": "Object describing the Azure Firewall in vHub"
+            }
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Network/virtualHubs",
+            "apiVersion": "2019-09-01",
+            "location": "[parameters('vhub').location]",
+            "name": "[parameters('vhub').name]",
+            "properties": {
+                "virtualWan": {
+                    "id": "[resourceId('Microsoft.Network/virtualWans/',parameters('vwanname'))]"
+                },
+                "addressPrefix": "[parameters('vhub').addressPrefix]",
+                "virtualNetworkConnections": "[parameters('vhub').virtualNetworkConnections]",
+                "virtualHubRouteTableV2s": "[parameters('vhub').virtualHubRouteTableV2s]",
+                "vpnGateway": "[if(not(empty(parameters('vhub').vpnGateway)),parameters('vhub').vpnGateway, json('null'))]"                                
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2017-05-10",
+            "condition": "[greater(length(parameters('vpngw')),0)]",
+            "dependsOn": [
+                "[concat('Microsoft.Network/virtualHubs/', parameters('vhub').name)]"
+            ],
+            "name": "[concat(parameters('vhub').name,'-vpngw')]",
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "variables": {},
+                    "resources": [
+                        {
+                            "type": "Microsoft.Network/vpnGateways",
+                            "apiVersion": "2019-09-01",
+                            "location": "[parameters('vhub').location]",
+                            "name": "[parameters('vpngw').name]",
+                            "properties": {
+                                "virtualHub": {
+                                    "id": "[resourceId('Microsoft.Network/virtualHubs/',parameters('vhub').name)]"
+                                },
+                                "bgpSettings": "[parameters('vpngw').bgpSettings]",
+                                "vpnGatewayScaleUnit": "[parameters('vpngw').vpnGatewayScaleUnit]"
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2017-05-10",
+            "condition": "[greater(length(parameters('ergw')),0)]",
+            "dependsOn": [
+                "[concat('Microsoft.Network/virtualHubs/', parameters('vhub').name)]"
+            ],
+            "name": "[concat(parameters('vhub').name,'-ergw')]",
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "variables": {},
+                    "resources": [
+                        {
+                            "type": "Microsoft.Network/expressRouteGateways",
+                            "apiVersion": "2019-09-01",
+                            "location": "[parameters('vhub').location]",
+                            "name": "[parameters('ergw').name]",
+                            "properties": {
+                                "virtualHub": {
+                                    "id": "[resourceId('Microsoft.Network/virtualHubs/',parameters('vhub').name)]"
+                                },
+                                "autoScaleConfiguration": "[parameters('ergw').autoScaleConfiguration]",
+                                "expressRouteConnections": "[parameters('ergw').expressRouteConnections]"
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2017-05-10",
+            "condition": "[greater(length(parameters('azfw')),0)]",
+            "dependsOn": [
+                "[concat('Microsoft.Network/virtualHubs/', parameters('vhub').name)]"
+            ],
+            "name": "[concat(parameters('vhub').name,'-azfw')]",
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "resources": [
+                        {
+                            "apiVersion": "2019-09-01",
+                            "type": "Microsoft.Network/azureFirewalls",
+                            "name": "[parameters('azfw').name]",
+                            "location": "[parameters('vhub').location]",
+                            "properties": {
+                                "virtualHub": {
+                                    "id": "[resourceId('Microsoft.Network/virtualHubs/',parameters('vhub').name)]"
+                                },
+                                "sku": {
+                                    "Name": "AZFW_Hub",
+                                    "Tier": "Standard"
+                                },                                
+                                "firewallPolicy": {
+                                    "id": "[if(not(empty(parameters('azfw').firewallPolicy.id)),parameters('azfw').firewallPolicy.id, json('null'))]"                                    
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}

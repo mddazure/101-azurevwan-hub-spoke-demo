@@ -1,0 +1,39 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "fwpolicy": {
+            "type": "object",
+            "defaultValue": {},
+            "metadata": {
+                "description": "Object describing Azure Firewall Policy"
+            }
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Network/firewallPolicies",
+            "apiVersion": "2019-09-01",
+            "name": "[parameters('fwpolicy').firewallPolicyName]",
+            "location": "[parameters('fwpolicy').location]",
+            "dependsOn": [],
+            "tags": {},
+            "properties": {},
+            "resources": [
+                {
+                    "type": "ruleGroups",
+                    "apiVersion": "2019-09-01",
+                    "name": "[parameters('fwpolicy').ruleGroups.name]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Network/firewallPolicies',parameters('fwpolicy').firewallPolicyName)]"
+                    ],
+                    "properties": {
+                        "priority": "[parameters('fwpolicy').ruleGroups.properties.priority]",
+                        "rules": "[parameters('fwpolicy').ruleGroups.properties.rules]"
+                    }
+                }
+            ]
+        }
+    ]
+}
